@@ -24,12 +24,11 @@ class Friend {
 
 const friendJsonSchema = createJsonSchemaForClass(Friend);
 
-@Schema(
-  {
-    includeDefaultIdProperty: true,
-  },
-  { additionalProperties: false, required: ["name", "age", "friends"] }
-)
+@Schema({
+  includeDefaultIdProperty: true,
+  additionalProperties: false,
+  required: ["name", "age", "friends"],
+})
 class User {
   @Property()
   name: string;

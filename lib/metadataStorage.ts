@@ -1,13 +1,13 @@
-import { JsonSchema, ObjectKeywords } from "./jsonSchemaTypes";
+import { JsonSchema, JsonSchemaObject } from "./jsonSchemaTypes";
 
 export type ClassOptions = {
   includeDefaultIdProperty?: boolean;
-  mergeWith?: ObjectKeywords | ObjectKeywords[];
+  mergeWith?: JsonSchemaObject | JsonSchemaObject[];
 };
 
-export type ClassKeywords = Omit<ObjectKeywords, "bsonType" | "properties">;
+export type JsonSchemaClass = Omit<JsonSchemaObject, "bsonType" | "properties">;
 
-export type ClassMetadata = ClassOptions & ClassKeywords;
+export type ClassMetadata = ClassOptions & JsonSchemaClass;
 
 type PropertyMetadata = {
   propertyKey: string;

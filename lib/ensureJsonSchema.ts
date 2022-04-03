@@ -1,6 +1,6 @@
 import { isDeepStrictEqual } from "node:util";
 import type { Db } from "mongodb";
-import type { ObjectKeywords } from "./jsonSchemaTypes";
+import type { JsonSchemaObject } from "./jsonSchemaTypes";
 
 const DEBUG_ENABLED = process.env.DEBUG_ENSUREJSONSCHEMA === "true";
 const BENCHMARKS_ENABLED = process.env.BENCHMARKS_ENSUREJSONSCHEMA === "true";
@@ -10,7 +10,7 @@ const BENCHMARKS_ENABLED = process.env.BENCHMARKS_ENSUREJSONSCHEMA === "true";
 export const ensureJsonSchema = async (
   db: Db,
   collectionName: string,
-  jsonSchema: ObjectKeywords
+  jsonSchema: JsonSchemaObject
 ) => {
   if (BENCHMARKS_ENABLED) console.time("ensureJsonSchema");
   const validator = { $jsonSchema: jsonSchema };

@@ -1,6 +1,11 @@
 import { ObjectId } from "mongodb";
-import type { JsonSchema, JsonSchemaArray, BsonType } from "./jsonSchemaTypes";
-import type { ClassKeywords, ClassOptions } from "./metadataStorage";
+import type {
+  JsonSchema,
+  JsonSchemaArray,
+  JsonSchemaObject,
+  BsonType,
+} from "./jsonSchemaTypes";
+import type { ClassMetadata } from "./metadataStorage";
 import { addPropertyMetadata, setClassMetadata } from "./metadataStorage";
 
 const DATA_TYPE_TO_BSON_TYPE = new Map<Function, BsonType>([
@@ -12,13 +17,11 @@ const DATA_TYPE_TO_BSON_TYPE = new Map<Function, BsonType>([
   [Buffer, "binData"],
 ]);
 
-export const Schema =
-  (options: ClassOptions, jsonSchema: ClassKeywords = {}) =>
-  (target: unknown) => {
-    if (!target || typeof target !== "function")
-      throw new Error(`@Schema must be used on a class`);
-    setClassMetadata(target, { ...options, ...jsonSchema });
-  };
+export const Schema = (classMetadata: ClassMetadata) => (target: unknown) => {
+  if (!target || typeof target !== "function")
+    throw new Error(`@Schema must be used on a class`);
+  setClassMetadata(target, classMetadata);
+};
 
 export type PropertyOptions = {
   isNullable?: boolean;

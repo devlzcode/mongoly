@@ -1,12 +1,12 @@
-import type { GenericKeywords, ObjectKeywords } from "./jsonSchemaTypes";
+import type { JsonSchema, JsonSchemaObject } from "./jsonSchemaTypes";
 import { getClassMetadata, getClassPropertyMetadata } from "./metadataStorage";
 
 const BENCHMARKS_ENABLED =
   process.env.BENCHMARKS_CREATEJSONSCHEMAFORCLASS === "true";
 
-const DEFAULT_ID_PROPERTY: GenericKeywords = { bsonType: "objectId" };
+const DEFAULT_ID_PROPERTY: JsonSchema = { bsonType: "objectId" };
 
-const jsonSchemaStorage = new Map<Function, ObjectKeywords>();
+const jsonSchemaStorage = new Map<Function, JsonSchemaObject>();
 
 const createProperties = (target: Function) => {
   const propertyMetadata = getClassPropertyMetadata(target);
@@ -14,7 +14,7 @@ const createProperties = (target: Function) => {
     throw new Error(
       `Target class "${target}" does not have any property metadata`
     );
-  const properties: ObjectKeywords["properties"] = {};
+  const properties: JsonSchemaObject["properties"] = {};
   for (const { propertyKey, jsonSchema } of propertyMetadata)
     properties[propertyKey] = jsonSchema;
   return properties;
@@ -24,7 +24,10 @@ export const getExistingJsonSchemaForClass = (target: Function) =>
   jsonSchemaStorage.get(target);
 
 // Should merge `properties`, `required`, `additionalProperties` and `patternProperties`
-const mergeJsonSchema = (target: ObjectKeywords, source: ObjectKeywords) => {
+const mergeJsonSchema = (
+  target: JsonSchemaObject,
+  source: JsonSchemaObject
+) => {
   if (source.required) {
     if (target.required) {
       const unique = source.required.filter((x) =>
@@ -64,7 +67,7 @@ export const createJsonSchemaForClass = (target: Function) => {
   const existingJsonSchema = getExistingJsonSchemaForClass(target);
   if (existingJsonSchema) return existingJsonSchema;
   const classMetadata = getClassMetadata(target) || {};
-  const jsonSchema: ObjectKeywords = {
+  const jsonSchema: JsonSchemaObject = {
     bsonType: "object",
   };
   if (classMetadata.required) jsonSchema.required = classMetadata.required;

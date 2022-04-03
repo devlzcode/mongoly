@@ -26,21 +26,11 @@ class Building {
 
 const buildingJsonSchema = createJsonSchemaForClass(Building);
 
-@Schema(
-  {
-    includeDefaultIdProperty: true,
-  },
-  {
-    additionalProperties: false,
-    required: [
-      "id",
-      "name",
-      "currentBuilding",
-      "mailingAddresses",
-      "createdAt",
-    ],
-  }
-)
+@Schema({
+  includeDefaultIdProperty: true,
+  additionalProperties: false,
+  required: ["id", "name", "currentBuilding", "mailingAddresses", "createdAt"],
+})
 class Employee {
   @Property()
   id: number;
