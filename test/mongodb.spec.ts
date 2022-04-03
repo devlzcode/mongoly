@@ -1,5 +1,3 @@
-import "reflect-metadata";
-
 import { Collection, Db, MongoClient } from "mongodb";
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import {
