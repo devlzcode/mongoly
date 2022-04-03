@@ -138,6 +138,7 @@ describe("MongoDB", () => {
     expect(result.value!.bestFriend.age).toBe(23);
   });
   afterAll(async () => {
+    await collection.drop();
     await client.close();
   });
 });
