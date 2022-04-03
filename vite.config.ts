@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import swc from "rollup-plugin-swc";
 
+// I use SWC to allow usage of decorators in my tests
 export default defineConfig({
   plugins: [
     swc({

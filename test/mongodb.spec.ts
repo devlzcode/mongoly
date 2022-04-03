@@ -132,7 +132,7 @@ describe("MongoDB", () => {
     builder.$set({ "friends.$[].age": 21 });
     builder.$inc({ "bestFriend.age": 1 });
     const result = await collection.findOneAndUpdate(
-      { name: "John" },
+      { "bestFriend.age": 22 },
       builder.build(),
       { returnDocument: "after" }
     );
