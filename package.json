@@ -6,9 +6,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "rimraf dist && tsc -p tsconfig.build.json",
     "test": "vitest",
-    "release": "release-it"
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
+    "release": "npm run build && release-it"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.1",
