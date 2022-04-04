@@ -54,6 +54,25 @@ export const Property =
     });
   };
 
+export type EnumPropertyOptions = {
+  isNullable?: boolean;
+  values: unknown | unknown[];
+};
+
+export const EnumProperty =
+  ({ values, isNullable }: EnumPropertyOptions) =>
+  (target: unknown, propertyKey: string) => {
+    if (!values || typeof values !== "object")
+      throw new Error(`@EnumProperty values must be an object or an array`);
+    if (!Array.isArray(values)) values = Object.values(values);
+    if (isNullable) (values as unknown[]).push(null);
+    const jsonSchema: JsonSchema = { enum: values as unknown[] };
+    addPropertyMetadata((target as Object).constructor, {
+      propertyKey,
+      jsonSchema,
+    });
+  };
+
 export type ArrayPropertyOptions = {
   itemsJsonSchema: JsonSchema;
   arrayJsonSchema?: Omit<JsonSchemaArray, "bsonType" | "array">;
