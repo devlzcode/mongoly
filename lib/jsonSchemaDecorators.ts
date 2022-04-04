@@ -1,10 +1,5 @@
 import { ObjectId } from "mongodb";
-import type {
-  JsonSchema,
-  JsonSchemaArray,
-  JsonSchemaObject,
-  BsonType,
-} from "./jsonSchemaTypes";
+import type { JsonSchema, JsonSchemaArray, BsonType } from "./jsonSchemaTypes";
 import type { ClassMetadata } from "./metadataStorage";
 import { addPropertyMetadata, setClassMetadata } from "./metadataStorage";
 
@@ -39,6 +34,7 @@ const inspectBsonType = (
   if (!jsonSchema.bsonType) {
     const dataType = Reflect.getMetadata("design:type", target, propertyKey);
     const bsonType = DATA_TYPE_TO_BSON_TYPE.get(dataType);
+    console.log(propertyKey, dataType, bsonType);
     if (!bsonType)
       throw new Error(`Unsupported data type at property "${propertyKey}"`);
     if (propertyOptions.isNullable) jsonSchema.bsonType = ["null", bsonType];

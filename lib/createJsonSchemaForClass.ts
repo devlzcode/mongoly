@@ -10,10 +10,10 @@ const jsonSchemaStorage = new Map<Function, JsonSchemaObject>();
 
 const createProperties = (target: Function) => {
   const propertyMetadata = getClassPropertyMetadata(target);
-  if (!propertyMetadata)
-    throw new Error(
+  if (!propertyMetadata) return undefined;
+  /*throw new Error(
       `Target class "${target}" does not have any property metadata`
-    );
+    )*/
   const properties: JsonSchemaObject["properties"] = {};
   for (const { propertyKey, jsonSchema } of propertyMetadata)
     properties[propertyKey] = jsonSchema;
@@ -70,6 +70,8 @@ export const createJsonSchemaForClass = (target: Function) => {
   const jsonSchema: JsonSchemaObject = {
     bsonType: "object",
   };
+
+  // Root properties
   if (classMetadata.required) jsonSchema.required = classMetadata.required;
   if (
     classMetadata.additionalProperties !== undefined &&
@@ -77,15 +79,47 @@ export const createJsonSchemaForClass = (target: Function) => {
   )
     jsonSchema.additionalProperties = classMetadata.additionalProperties;
   let properties = createProperties(target);
-  if (classMetadata.includeDefaultIdProperty)
+  if (properties && classMetadata.includeDefaultIdProperty)
     properties = { _id: DEFAULT_ID_PROPERTY, ...properties };
   jsonSchema.properties = properties;
+
+  // Transform properties
   if (classMetadata.mergeWith) {
     if (classMetadata.mergeWith instanceof Array) {
       for (const mergeWith of classMetadata.mergeWith)
         mergeJsonSchema(jsonSchema, mergeWith);
     } else mergeJsonSchema(jsonSchema, classMetadata.mergeWith);
   }
+  if (jsonSchema.properties) {
+    if (classMetadata.omitProperties && classMetadata.pickProperties) {
+      throw new Error(
+        `Cannot use both "omitProperties" and "pickProperties" options`
+      );
+    }
+    if (classMetadata.omitProperties) {
+      for (const property of classMetadata.omitProperties)
+        delete jsonSchema.properties[property];
+    }
+    if (classMetadata.pickProperties) {
+      const propertiesToPick = classMetadata.pickProperties;
+      const propertiesToOmit = Object.keys(jsonSchema.properties).filter(
+        (property) => !propertiesToPick.includes(property)
+      );
+      for (const property of propertiesToOmit)
+        delete jsonSchema.properties[property];
+    }
+    if (classMetadata.renameProperties) {
+      for (const [oldName, newName] of Object.entries(
+        classMetadata.renameProperties
+      )) {
+        if (jsonSchema.properties[oldName]) {
+          jsonSchema.properties[newName] = jsonSchema.properties[oldName];
+          delete jsonSchema.properties[oldName];
+        }
+      }
+    }
+  }
+
   jsonSchemaStorage.set(target, jsonSchema);
   if (BENCHMARKS_ENABLED) console.timeEnd(`createJsonSchemaForClass`);
   return jsonSchema;

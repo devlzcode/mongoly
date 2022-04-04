@@ -3,6 +3,9 @@ import { JsonSchema, JsonSchemaObject } from "./jsonSchemaTypes";
 export type ClassOptions = {
   includeDefaultIdProperty?: boolean;
   mergeWith?: JsonSchemaObject | JsonSchemaObject[];
+  omitProperties?: string[];
+  pickProperties?: string[];
+  renameProperties?: { [oldName: string]: string };
 };
 
 export type JsonSchemaClass = Omit<JsonSchemaObject, "bsonType" | "properties">;

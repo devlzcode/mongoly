@@ -13,12 +13,12 @@ import {
 class Friend {
   @Property()
   name: string;
-  @Property({ isNullable: true })
+  @Property()
   age?: number;
 
   constructor(name: string, age?: number) {
     this.name = name;
-    this.age = age;
+    if (age) this.age = age;
   }
 }
 
@@ -137,9 +137,7 @@ describe("MongoDB", () => {
     expect(result.value!.bestFriend.age).toBe(23);
   });
   afterAll(async () => {
-    await collection.drop();
+    //await collection.drop();
     await client.close();
   });
 });
-
-it("Should create the collection with JSON");

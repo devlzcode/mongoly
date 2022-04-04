@@ -41,7 +41,7 @@ class Employee {
   @ArrayProperty({ itemsJsonSchema: addressJsonSchema })
   mailingAddresses: Address[];
   @Property()
-  createdAt: Date;
+  createdAt: Date = new Date();
 }
 
 const employeeJsonSchema = createJsonSchemaForClass(Employee);

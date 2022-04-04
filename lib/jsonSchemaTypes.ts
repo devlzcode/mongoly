@@ -22,7 +22,7 @@ export type NumberKeywords = {
   multipleOf?: number;
   maximum?: number;
   exlcusiveMaximum?: number;
-  minmum?: number;
+  minimum?: number;
   exclusiveMinimum?: number;
 };
 
