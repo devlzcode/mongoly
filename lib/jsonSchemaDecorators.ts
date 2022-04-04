@@ -34,10 +34,9 @@ const inspectBsonType = (
   if (!jsonSchema.bsonType) {
     const dataType = Reflect.getMetadata("design:type", target, propertyKey);
     const bsonType = DATA_TYPE_TO_BSON_TYPE.get(dataType);
-    console.log(propertyKey, dataType, bsonType);
     if (!bsonType)
       throw new Error(`Unsupported data type at property "${propertyKey}"`);
-    if (propertyOptions.isNullable) jsonSchema.bsonType = ["null", bsonType];
+    if (propertyOptions.isNullable) jsonSchema.bsonType = [bsonType, "null"];
     else jsonSchema.bsonType = bsonType;
   }
 };
@@ -56,17 +55,21 @@ export const Property =
 
 export type EnumPropertyOptions = {
   isNullable?: boolean;
+  isArray?: boolean;
   values: unknown | unknown[];
 };
 
 export const EnumProperty =
-  ({ values, isNullable }: EnumPropertyOptions) =>
+  ({ values, isNullable, isArray }: EnumPropertyOptions) =>
   (target: unknown, propertyKey: string) => {
     if (!values || typeof values !== "object")
       throw new Error(`@EnumProperty values must be an object or an array`);
     if (!Array.isArray(values)) values = Object.values(values);
-    if (isNullable) (values as unknown[]).push(null);
-    const jsonSchema: JsonSchema = { enum: values as unknown[] };
+    const enumJsonSchema: JsonSchema = { enum: values as unknown[] };
+    if (isNullable) enumJsonSchema.enum!.push(null);
+    const jsonSchema: JsonSchema = isArray
+      ? { bsonType: "array", items: enumJsonSchema }
+      : enumJsonSchema;
     addPropertyMetadata((target as Object).constructor, {
       propertyKey,
       jsonSchema,

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   ArrayProperty,
   createJsonSchemaForClass,
+  EnumProperty,
   Property,
   Schema,
 } from "../lib";
@@ -17,11 +18,19 @@ class Address {
 
 const addressJsonSchema = createJsonSchemaForClass(Address);
 
+enum EmployeeType {
+  FullTime = "FULL_TIME",
+  PartTime = "PART_TIME",
+}
+
 class Building {
   @Property()
   name: string;
   @Property({ jsonSchema: addressJsonSchema })
   address: Address;
+
+  @EnumProperty({ values: EmployeeType, isArray: true })
+  employeeTypes: EmployeeType[];
 }
 
 const buildingJsonSchema = createJsonSchemaForClass(Building);
@@ -42,6 +51,9 @@ class Employee {
   mailingAddresses: Address[];
   @Property()
   createdAt: Date = new Date();
+
+  @EnumProperty({ values: EmployeeType })
+  type: EmployeeType;
 }
 
 const employeeJsonSchema = createJsonSchemaForClass(Employee);
@@ -69,6 +81,12 @@ describe("Decorators", () => {
           bsonType: "string",
         },
         address: addressJsonSchema,
+        employeeTypes: {
+          bsonType: "array",
+          items: {
+            enum: [EmployeeType.FullTime, EmployeeType.PartTime],
+          },
+        },
       },
     });
     expect(employeeJsonSchema).toEqual({
@@ -89,6 +107,9 @@ describe("Decorators", () => {
         mailingAddresses: {
           bsonType: "array",
           items: addressJsonSchema,
+        },
+        type: {
+          enum: [EmployeeType.FullTime, EmployeeType.PartTime],
         },
         createdAt: { bsonType: "date" },
       },
