@@ -30,8 +30,8 @@ const mergeJsonSchema = (
 ) => {
   if (source.required) {
     if (target.required) {
-      const unique = source.required.filter((x) =>
-        target.required!.includes(x)
+      const unique = source.required.filter(
+        (x) => !target.required!.includes(x)
       );
       target.required.push(...unique);
     } else target.required = source.required;
@@ -113,7 +113,7 @@ export const createJsonSchemaForClass = (target: Function) => {
         classMetadata.renameProperties
       )) {
         if (jsonSchema.properties[oldName]) {
-          jsonSchema.properties[newName] = jsonSchema.properties[oldName];
+          jsonSchema.properties[newName] = jsonSchema.properties[oldName]!;
           delete jsonSchema.properties[oldName];
         }
       }

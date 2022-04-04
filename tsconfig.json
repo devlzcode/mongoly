@@ -2,6 +2,7 @@
   "extends": "@tsconfig/node17/tsconfig.json",
   "compilerOptions": {
     "strictPropertyInitialization": false,
+    "noUncheckedIndexedAccess": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   }
