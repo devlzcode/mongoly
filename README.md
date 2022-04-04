@@ -1,4 +1,5 @@
 > This library is under heavy development and is not yet ready for production use.
+> This library of course only adheres to JSON Schema v4 since that is what MongoDB supports
 
 ## MOTIVATION
 I wanted to create lightweight yet effective suite of MongoDB tools that could be used in a variety of environments and ultimately remove the need for mongoose. The primary tools I wanted to create were:
