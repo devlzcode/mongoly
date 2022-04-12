@@ -39,9 +39,12 @@ const inspectBsonType = (
     else jsonSchema.bsonType = bsonType;
   }
   if (propertyOptions.isNullable) {
-    if (jsonSchema.bsonType instanceof Array) {
-      jsonSchema.bsonType.push("null");
-    } else jsonSchema.bsonType = [jsonSchema.bsonType, "null"];
+    if (!(jsonSchema.bsonType instanceof Array))
+      jsonSchema.bsonType = [jsonSchema.bsonType, "null"];
+    else {
+      if (!jsonSchema.bsonType.includes("null"))
+        jsonSchema.bsonType.push("null");
+    }
   }
 };
 
