@@ -36,8 +36,12 @@ const inspectBsonType = (
     const bsonType = DATA_TYPE_TO_BSON_TYPE.get(dataType);
     if (!bsonType)
       throw new Error(`Unsupported data type at property "${propertyKey}"`);
-    if (propertyOptions.isNullable) jsonSchema.bsonType = [bsonType, "null"];
     else jsonSchema.bsonType = bsonType;
+  }
+  if (propertyOptions.isNullable) {
+    if (jsonSchema.bsonType instanceof Array) {
+      jsonSchema.bsonType.push("null");
+    } else jsonSchema.bsonType = [jsonSchema.bsonType, "null"];
   }
 };
 
@@ -64,7 +68,7 @@ export const EnumProperty =
   (target: unknown, propertyKey: string) => {
     if (!values || typeof values !== "object")
       throw new Error(`@EnumProperty values must be an object or an array`);
-    if (!Array.isArray(values)) values = Object.values(values);
+    if (!(values instanceof Array)) values = Object.values(values);
     const enumJsonSchema: JsonSchema = { enum: values as unknown[] };
     if (isNullable) enumJsonSchema.enum!.push(null);
     const jsonSchema: JsonSchema = isArray
