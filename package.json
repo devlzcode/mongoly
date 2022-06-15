@@ -2,6 +2,7 @@
   "name": "mongoly",
   "version": "0.1.0-11",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -10,24 +11,38 @@
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "release": "npm run build && release-it"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./decorators": {
+      "types": "./dist/decorators.d.ts",
+      "default": "./dist/decorators.js"
+    },
+    "./tools": {
+      "types": "./dist/tools.d.ts",
+      "default": "./dist/tools.js"
+    }
+  },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^8.3.1",
-    "@swc/core": "^1.2.162",
+    "@swc/core": "^1.2.203",
     "@tsconfig/node17": "^1.0.0",
+    "@types/node": "^18.0.0",
     "mongodb": "^4.4.1",
-    "reflect-metadata": "^0.1.13",
     "release-it": "^14.14.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.70.1",
-    "rollup-plugin-swc": "^0.2.1",
     "ts-node": "^10.7.0",
-    "tslib": "^2.3.1",
-    "typescript": "^4.6.3",
+    "tsconfig.json": "link:@tsconfig/node17/tsconfig.json",
+    "typescript": "^4.7.3",
+    "unplugin-swc": "^1.3.2",
     "vite": "^2.9.1",
     "vitest": "^0.8.2"
   },
   "peerDependencies": {
-    "mongodb": "^4.4.1",
+    "mongodb": "^4.4.1"
+  },
+  "optionalDependencies": {
     "reflect-metadata": "^0.1.13"
   }
 }

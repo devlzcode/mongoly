@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { UpdateBuilder } from "../lib";
+import { UpdateBuilder } from "../lib/tools";
 
 describe("UpdateBuilder", () => {
   it("Should properly build the updates", () => {

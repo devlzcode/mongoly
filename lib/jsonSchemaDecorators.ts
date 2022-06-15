@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { ObjectId } from "mongodb";
 import type { JsonSchema, JsonSchemaArray, BsonType } from "./jsonSchemaTypes";
 import type { ClassMetadata } from "./metadataStorage";

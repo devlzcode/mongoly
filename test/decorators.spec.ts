@@ -5,7 +5,7 @@ import {
   EnumProperty,
   Property,
   Schema,
-} from "../lib";
+} from "../lib/decorators";
 
 class Address {
   @Property()

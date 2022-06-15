@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createJsonSchemaForClass, Property, Schema } from "../lib";
+import { createJsonSchemaForClass, Property, Schema } from "../lib/decorators";
 
 @Schema({ additionalProperties: false })
 class Asset {

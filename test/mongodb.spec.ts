@@ -1,14 +1,13 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { ensureIndexes, ensureJsonSchema } from "../lib/index";
+import { UpdateBuilder } from "../lib/tools";
 import {
   ArrayProperty,
   createJsonSchemaForClass,
-  ensureIndexes,
-  ensureJsonSchema,
   Property,
   Schema,
-  UpdateBuilder,
-} from "../lib";
+} from "../lib/decorators";
 
 class Friend {
   @Property()
